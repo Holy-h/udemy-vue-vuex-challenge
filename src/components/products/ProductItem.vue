@@ -13,25 +13,40 @@
       </div>
     </div>
     <div class="product__actions">
-      <button @click="addToCart">Add to Cart</button>
+      <button @click="addToCart({ productData })">Add to Cart</button>
     </div>
   </li>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  inject: ['addProductToCart'],
+  // inject: ['addProductToCart'],
   props: ['id', 'image', 'title', 'price', 'description'],
-  methods: {
-    addToCart() {
-      this.addProductToCart({
+  computed: {
+    productData() {
+      return {
         id: this.id,
         image: this.image,
         title: this.title,
-        price: this.price,
-      });
-    },
+        price: this.price
+      };
+    }
   },
+  methods: {
+    ...mapActions({
+      addToCart: 'addProductToCart'
+    })
+    // addToCart() {
+    //   this.addProductToCart({
+    //     id: this.id,
+    //     image: this.image,
+    //     title: this.title,
+    //     price: this.price,
+    //   });
+    // },
+  }
 };
 </script>
 
