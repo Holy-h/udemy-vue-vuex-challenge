@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 import router from './router.js';
 import App from './App.vue';
 import BaseBadge from './components/ui/BaseBadge.vue';
-import store from './store.js';
+import store from './store/index.js';
 
 const app = createApp(App);
 
