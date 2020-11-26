@@ -16,8 +16,18 @@
         </div>
       </div>
       <div class="item__total">Total: ${{ itemTotal }}</div>
-      <button @click="remove({ prodId })">Remove</button>
+      <div class="buttons">
+        <button @click="remove({ prodId })">Remove</button>
+        <button @click="isModalActivated = true">Change Quantity</button>
+      </div>
     </div>
+    <dialog :open="isModalActivated">
+      <div>
+        <h2>Change Quantity</h2>
+        <input type="number" v-model="newQty" />
+        <button @click="changeQty({ prodId, newQty })">Confirm</button>
+      </div>
+    </dialog>
   </li>
 </template>
 
@@ -25,6 +35,12 @@
 import { mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      isModalActivated: false,
+      newQty: this.qty
+    };
+  },
   props: ['prodId', 'title', 'image', 'price', 'qty'],
   computed: {
     itemTotal() {
@@ -33,14 +49,20 @@ export default {
   },
   methods: {
     ...mapActions({
-      remove: 'removeProductFromCart'
-    })
+      remove: 'removeProductFromCart',
+      changeProductQtyToCart: 'changeProductQtyToCart'
+    }),
+    changeQty(payload) {
+      this.isModalActivated = false;
+      this.changeProductQtyToCart(payload);
+    }
   }
 };
 </script>
 
 <style scoped>
 li {
+  position: relative;
   margin: 1rem auto;
   padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
@@ -69,6 +91,11 @@ img {
   width: auto;
 }
 
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
 button {
   font: inherit;
   border: 1px solid #8f0030;
@@ -79,9 +106,37 @@ button {
   padding: 0.5rem 1.5rem;
 }
 
+button:first-child {
+  margin-right: 8px;
+}
+
 button:hover,
 button:active {
   background-color: #53001c;
   border-color: #53001c;
+}
+
+dialog {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+dialog div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+dialog input {
+  font-size: 1rem;
+  padding: 8px;
+}
+
+dialog button {
+  margin-top: auto;
 }
 </style>

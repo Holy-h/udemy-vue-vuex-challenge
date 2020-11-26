@@ -39,5 +39,21 @@ export default {
     cart.total -= productData.price * productData.qty;
 
     context.commit('setCart', { newCart: cart });
+  },
+  changeProductQtyToCart(context, { prodId, newQty }) {
+    const cart = context.getters.getCart;
+    const productInCartIndex = cart.items.findIndex(
+      item => item.productId === prodId
+    );
+    const productData = cart.items[productInCartIndex];
+
+    const changeQty = newQty - productData.qty;
+
+    productData.qty = newQty;
+
+    cart.qty += changeQty;
+    cart.total += productData.price * changeQty;
+
+    context.commit('setCart', { newCart: cart });
   }
 };
